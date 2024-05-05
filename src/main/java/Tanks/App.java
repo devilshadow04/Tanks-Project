@@ -65,7 +65,9 @@ public class App extends PApplet {
 
     int currentScoreIndex = 0;
     int lastScoreTime = 0;
+    int levelEndTime = 0;
     boolean gameOver = false;
+    boolean levelEnd = false;
 
 
 
@@ -322,6 +324,11 @@ public class App extends PApplet {
                     wind.update();
                     projectileList.add(current_projectile);
                 }
+                if (levelEnd) {
+                    levelIndex += 1;
+                    switchLevel(levelIndex);
+                    levelEnd = false;
+                }
             }
         }
         else {
@@ -406,17 +413,6 @@ public class App extends PApplet {
                                 firedTank.updateScore(damage);
                             }
                         }
-                        if (tank.isDead() && !tank.hasExploded()) {
-                            Explosion tankExplosion = tank.explode(15);
-                            explosionList.add(tankExplosion);
-                            
-                        }
-                        else if (tank.getY() >= HEIGHT && !tank.hasExploded()) {
-                            Explosion tankExplosion = tank.explode(30);
-                            explosionList.add(tankExplosion);
-                            tank.lostHealth(tank.getHealth());
-                            
-                        }
                     }
                     
                     explosionList.add(explosion);
@@ -425,6 +421,20 @@ public class App extends PApplet {
                 }
             }
 
+        }
+
+        for (Tank tank : tankList) {
+            if (tank.isDead() && !tank.hasExploded()) {
+                Explosion tankExplosion = tank.explode(15);
+                explosionList.add(tankExplosion);
+                
+            }
+            else if (tank.getY() >= HEIGHT && !tank.hasExploded()) {
+                Explosion tankExplosion = tank.explode(30);
+                explosionList.add(tankExplosion);
+                tank.lostHealth(tank.getHealth());
+                
+            }
         }
 
         Iterator<Explosion> explosionIterator = explosionList.iterator();
@@ -490,12 +500,17 @@ public class App extends PApplet {
                 deadCount += 1;
             }
         }
-        if (deadCount >= tankList.size() - 1) {
-            levelIndex += 1;
-            switchLevel(levelIndex);
+        if (deadCount >= tankList.size() - 1  && !levelEnd) {
+            levelEnd = true;
+            levelEndTime = millis();
 
         }
 
+        if (levelEnd && millis() - levelEndTime >= 1000) {
+            levelIndex += 1;
+            switchLevel(levelIndex);
+            levelEnd = false;
+        }
         
         //----------------------------------
         //display scoreboard:
@@ -514,6 +529,7 @@ public class App extends PApplet {
             text(t.getScore(), WIDTH - 50, 30 * (player - 'A' + 4));
         }   
 
+
         if (gameOver) {
             ArrayList<Tank> sortedScore = sortedScore();
             stroke(0, 0, 0);
@@ -522,12 +538,12 @@ public class App extends PApplet {
             rect(300, 200, 300, 50 * sortedScore.size());  
             textSize(24.0f); 
             fill(0, 0, 0);  
-            text("Final Scores", 310, 180);   
-            text("Press R to restart the game", 300, 250 + 50 * sortedScore.size());
+            text("FINAL SCORES", 310, 180);   
+            text("PRESS R TO RESTART THE GAME", 280, 250 + 50 * sortedScore.size());
             Tank winner = sortedScore.get(0);
             int[] winnerColor = winner.getColor(this);
             fill(winnerColor[0], winnerColor[1], winnerColor[2]);
-            text("Player " + winner.getName() + " wins!", 310, 120);
+            text("PLAYER " + winner.getName() + " WINS!", 310, 120);
             for (int i = 0; i < currentScoreIndex; i++){
                 Tank tank = sortedScore.get(i);
                 char name = tank.getName();
