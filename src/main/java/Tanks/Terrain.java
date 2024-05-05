@@ -8,17 +8,74 @@ import  java.util.ArrayList;
 
 public class Terrain {
 
-    public int[] getHeight(char[][] pixelMap) {
-        int col_pixelMap = pixelMap[0].length;
-        int row_pixelMap = pixelMap.length;
+    private String layout;
+    private ArrayList<Integer> treeColumn;
+    private String foreground_colour;
+    private char[][] levelMap;
+
+    // public Terrain(String filename) {
+    //     this.filename = filename;
+    // }
+
+    public Terrain(String layout, String foreground_colour) {
+        this.layout = layout;
+        this.foreground_colour = foreground_colour;
+        this.levelMap = loadLevel(layout);
+    }
+
+    public char[][] loadLevel(String layout) {
+        try {
+            File f = new File(layout);
+            Scanner scan = new Scanner(f);
+            char[][] levelMap;
+            int row = 0;
+            levelMap = new char[20][28];
+            while (scan.hasNextLine() && row < 20) {
+                String line = scan.nextLine(); 
+                for (int col = 0; col < 28; col ++) {
+                    try {
+                        if (levelMap[row][col] == 'X') {
+                            continue;
+                        }
+                        levelMap[row][col] = line.charAt(col);
+                       
+                    }
+                    catch (StringIndexOutOfBoundsException e) {
+                        levelMap[row][col] = ' ';
+                    }
+                }
+                row += 1;
+                
+            }
+            return levelMap;
+        }
+        catch(FileNotFoundException e) {
+            System.out.println("File not Found");
+            return null;
+        }
+    }
+
+
+    public int[] getColor() {
+        int indexR = Integer.parseInt(foreground_colour.split(",")[0]);
+        int indexG = Integer.parseInt(foreground_colour.split(",")[1]);
+        int indexB = Integer.parseInt(foreground_colour.split(",")[2]);
+        int[] index = new int[]{indexR, indexG, indexB};
+        return index;
+    }
+
+    public int[] getHeight(char[][] levelMap) {
+        int totalCol = levelMap[0].length;
+        int totalRow = levelMap.length;
         int[] height = new int[896];
 
 
-        for (int col = 0; col < col_pixelMap; col++) {
-            for (int row = 0; row < row_pixelMap; row ++) {
-                if (pixelMap[row][col] == 'X') {
-                    height[col] = 32 * row;
-                    break;
+        for (int col = 0; col < totalCol; col++) {
+            for (int row = 0; row < totalRow; row ++) {
+                if (levelMap[row][col] == 'X') {
+                    for (int i = 0; i < 32; i++) {
+                        height[32 * col + i] = 32 * row;
+                    }
                 }
             }
         }
@@ -49,49 +106,42 @@ public class Terrain {
         return moving_average;
     }
 
-    public ArrayList<Integer> tree_column(char[][] pixelMap, App app) {
+    public ArrayList<Integer> tree_column(char[][] levelMap) {
 
-        int col_pixelMap = app.CELLSIZE * app.BOARD_WIDTH;
-        int row_pixelMap = app.BOARD_HEIGHT;       
+        int totalCol = levelMap[0].length;
+        int totalRow = levelMap.length;       
         ArrayList<Integer> tree_column = new ArrayList<>(); 
-        for (int col = 0; col < col_pixelMap; col++) {
-            for (int row = 0; row < row_pixelMap; row++) {
-                if (pixelMap[row][col] ==  'T') {
-                    tree_column.add(col);
+        for (int col = 0; col < totalCol; col++) {
+            for (int row = 0; row < totalRow; row++) {
+                if (levelMap[row][col] ==  'T') {
+                    tree_column.add(32 * col);
                 }
             }
         }
+        
         return tree_column;
     }
 
 
-    public void draw(char[][] pixelMap, App app) {
-        
-        int[] height_lst = getHeight(pixelMap);
-        int[] moving_average = moving_average(moving_average(height_lst));
-        ArrayList<Integer> tree_column = tree_column(pixelMap, app);
-        app.image(app.background, 0, 0);
 
-        for (int col = 0; col < app.BOARD_WIDTH * app.CELLSIZE; col++) {
-            for (int row = 0; row < app.BOARD_HEIGHT; row++) {
-                char character_type = pixelMap[row][col];
-                
-                if (character_type == 'X') {
-                    int height = moving_average[col];
-                    app.stroke(255, 255, 255);    
-                    app.line(col, height, col, app.HEIGHT);
-                    break;
-                    
-                }
-            }
+    public void draw(App app) {
+        
+        ArrayList<Integer> tree_column = tree_column(levelMap);
+        app.image(app.backgroundImage, 0, 0);
+
+        for (int col = 0; col < app.WIDTH; col++) {
+                int height = app.terrainHeight[col];
+                app.stroke(getColor()[0], getColor()[1], getColor()[2]);    
+                app.line(col, height, col, app.HEIGHT);            
         }
         
         for (int i = 0; i < tree_column.size(); i++) {
             int tree_col = tree_column.get(i);
-            int tree_row = moving_average[tree_col];
-            app.tree.resize(0, 32);
-            app.image(app.tree, tree_col - app.tree.width/2, tree_row - app.tree.height);
-            
+            int tree_row = app.terrainHeight[tree_col];
+            if (app.treeImage != null) {
+                app.treeImage.resize(0, 32);
+                app.image(app.treeImage, tree_col - app.treeImage.width/2, tree_row - app.treeImage.height);
+            }
         }
          
         }
