@@ -2,7 +2,10 @@ package Tanks;
 
 import java.util.*;
 
-public class Explosion {
+/**
+ * Represents an explosion in the game. Each explosion has a position, radius, and duration, and can update its progress and affect the terrain.
+ */
+ public class Explosion {
     private int x;
     private int y;
     private int radius;
@@ -13,34 +16,62 @@ public class Explosion {
     private float orangeRadius;
     private float yellowRadius;
 
+    /**
+     * Create a new explosion with the given position and radius.
+     *
+     * @param x x-coordinate of the explosion
+     * @param y y-coordinate of the explosion
+     * @param radius the radius of the explosion
+     */
+
     public Explosion(int x, int y, int radius) {
         this.x = x;
         this.y = y;
         this.radius = radius;
         this.elapsedTime = 0;
-
     }
+
+    /**
+     * Gets the x-coordinate of the explosion.
+     * @return the x-coordinate of the explosion
+     */
 
     public int getX() {
         return this.x;
     }
 
+    /**
+     * Gets the y-coordinate of the explosion.
+     * @return the y-coordinate of the explosion
+     */
+
     public int getY() {
         return this.y;
     }
+
+    /**
+     * Gets the radius of the explosion.
+     *
+     * @return the radius of the explosion
+     */
 
     public int getRadius() {
         return this.radius;
     }
 
-    public float getElapsedTime() {
-        return elapsedTime;
-    }
+    /**
+     * Gets the progress of the explosion animation.
+     *
+     * @return the progress of the explosion animation
+     */
 
     public float getProgress() {
         return this.progress;
     }
 
+    /**
+     * Updates the explosion animation progress.
+     */
     public void update() {
         // Calculate progress of explosion animation
         elapsedTime += 1/30f;
@@ -53,6 +84,12 @@ public class Explosion {
         
     }
 
+    /**
+     * Modifies the terrain height array based on the explosion.
+     *
+     * @param terrainHeight the array that contains terrain heights
+     * @return the modified terrain height array
+     */
 
     public int[] terrainExplosion(int[] terrainHeight) {
         for (int i = Math.max(0, x - radius); i < Math.min(896, x + radius); i++) {
@@ -70,7 +107,11 @@ public class Explosion {
 
     }
 
-
+    /**
+     * Draws the explosion.
+     *
+     * @param app the application instance
+     */
     
     public void draw(App app) {
         if (elapsedTime < explosionDuration) {

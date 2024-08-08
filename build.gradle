@@ -43,10 +43,28 @@ application {
 }
 
 test {
+    testLogging {
+
+        events "passed", "skipped", "failed"
+
+        showStandardStreams = true
+        
+        onOutput { descriptor, event ->
+            if (event.destination == TestOutputEvent.Destination.StdOut) {
+                logger.lifecycle("Test: ${descriptor.name} - ${event.message}")
+            }
+            if (event.destination == TestOutputEvent.Destination.StdErr) {
+                logger.lifecycle("Test: ${descriptor.name} - ERROR: ${event.message}")
+            }
+        }
+
+        exceptionFormat = 'full'
+    }
     // Use junit platform for unit tests
     useJUnitPlatform()
     ignoreFailures = true
 }
+
 
 jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE

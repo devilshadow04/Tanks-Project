@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Terrain.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tanks_scaffold</a> &gt; <a href="index.source.html" class="el_package">Tanks</a> &gt; <span class="el_source">Terrain.java</span></div><h1>Terrain.java</h1><pre class="source lang-java linenums">package Tanks;
+
+import java.io.File;
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.io.FileNotFoundException;
+
+/**
+ * Represents the terrain in the game. The terrain consists of the game map loaded from a file, including grounds or trees.
+ */
+public class Terrain {
+
+    private String layout;
+    private String foregroundColour;
+    private char[][] levelMap;
+
+    /**
+     * Create a Terrain object with the specified layout and foreground color.
+     *
+     * @param layout the file path to the layout file containing the game map
+     * @param foregroundColour the color of the foreground elements of the terrain
+     */
+
+<span class="fc" id="L24">    public Terrain(String layout, String foregroundColour) {</span>
+<span class="fc" id="L25">        this.layout = layout;</span>
+<span class="fc" id="L26">        this.foregroundColour = foregroundColour;</span>
+<span class="fc" id="L27">        this.levelMap = loadLevel(layout);</span>
+<span class="fc" id="L28">    }</span>
+
+    /**
+     * Loads the game map from the a layout file.
+     *
+     * @param layout the file path to the layout file
+     * @return a 2D character array representing the game map
+     */
+
+    public char[][] loadLevel(String layout) {
+        try {
+<span class="fc" id="L39">            File f = new File(layout);</span>
+<span class="fc" id="L40">            Scanner scan = new Scanner(f);</span>
+            char[][] levelMap;
+<span class="fc" id="L42">            int row = 0;</span>
+<span class="fc" id="L43">            levelMap = new char[20][28];</span>
+<span class="fc bfc" id="L44" title="All 4 branches covered.">            while (scan.hasNextLine() &amp;&amp; row &lt; 20) {</span>
+<span class="fc" id="L45">                String line = scan.nextLine(); </span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">                for (int col = 0; col &lt; 28; col ++) {</span>
+                    try {
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">                        if (levelMap[row][col] == 'X') {</span>
+<span class="nc" id="L49">                            continue;</span>
+                        }
+<span class="fc" id="L51">                        levelMap[row][col] = line.charAt(col);</span>
+                       
+                    }
+<span class="fc" id="L54">                    catch (StringIndexOutOfBoundsException e) {</span>
+<span class="fc" id="L55">                        levelMap[row][col] = ' ';</span>
+<span class="fc" id="L56">                    }</span>
+                }
+<span class="fc" id="L58">                row += 1;</span>
+                
+<span class="fc" id="L60">            }</span>
+<span class="fc" id="L61">            return levelMap;</span>
+        }
+<span class="fc" id="L63">        catch(FileNotFoundException e) {</span>
+<span class="fc" id="L64">            System.out.println(&quot;File not Found&quot;);</span>
+<span class="fc" id="L65">            return null;</span>
+        }
+    }
+
+    /**
+     * Retrieves the RGB color values of the terrain's foreground elements.
+     * @return an integer array containing the RGB color values
+     */
+
+    public int[] getColor() {
+<span class="fc" id="L75">        int indexR = Integer.parseInt(foregroundColour.split(&quot;,&quot;)[0]);</span>
+<span class="fc" id="L76">        int indexG = Integer.parseInt(foregroundColour.split(&quot;,&quot;)[1]);</span>
+<span class="fc" id="L77">        int indexB = Integer.parseInt(foregroundColour.split(&quot;,&quot;)[2]);</span>
+<span class="fc" id="L78">        int[] index = new int[]{indexR, indexG, indexB};</span>
+<span class="fc" id="L79">        return index;</span>
+    }
+
+    /**
+     * Calculates the height of the terrain based on the game map.
+     *
+     * @param levelMap  a 2D character array representing the game map 
+     * @return the array that contains terrain heights
+     */
+
+    public int[] getHeight(char[][] levelMap) {
+<span class="fc" id="L90">        int totalCol = levelMap[0].length;</span>
+<span class="fc" id="L91">        int totalRow = levelMap.length;</span>
+<span class="fc" id="L92">        int[] height = new int[896];</span>
+
+
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        for (int col = 0; col &lt; totalCol; col++) {</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">            for (int row = 0; row &lt; totalRow; row ++) {</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">                if (levelMap[row][col] == 'X') {</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">                    for (int i = 0; i &lt; 32; i++) {</span>
+<span class="fc" id="L99">                        height[32 * col + i] = 32 * row;</span>
+                    }
+                }
+            }
+        }
+
+<span class="fc" id="L105">        return height;</span>
+    }
+    
+    /**
+     * Calculate the moving average of terrain heights.
+     *
+     * @param height an array containing the height of the terrain
+     * @return an array containing terrain heights after smoothing
+     */
+    public int[] movingAverage(int[] height) {
+<span class="fc" id="L115">        int[] movingAverage = new int[height.length];</span>
+<span class="fc" id="L116">        int movingSum = 0;</span>
+
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        for (int i = 0; i &lt; 32; i++) {</span>
+<span class="fc" id="L119">            movingSum += height[i];</span>
+        }
+
+<span class="fc" id="L122">        movingAverage[0] = (int)movingSum/32;</span>
+
+<span class="fc bfc" id="L124" title="All 2 branches covered.">        for (int i = 0; i &lt; (height.length - 32); i ++) {</span>
+<span class="fc" id="L125">            movingSum += (height[i + 32] - height[i]);</span>
+<span class="fc" id="L126">            movingAverage[i + 1] = (int)movingSum/32;</span>
+        } 
+        
+<span class="fc bfc" id="L129" title="All 2 branches covered.">        for (int j = height.length - 32; j &lt; height.length; j++) {</span>
+<span class="fc" id="L130">            movingAverage[j] = (int)movingSum/32;</span>
+        }
+
+
+<span class="fc" id="L134">        return movingAverage;</span>
+    }
+
+    /**
+     * Finding the x-coordinates of trees.
+     *
+     * @param levelMap a 2D character array representing the game map
+     * @return a list that contains coordinate of trees
+     */
+    public ArrayList&lt;Integer&gt; treeColumn(char[][] levelMap) {
+
+<span class="fc" id="L145">        int totalCol = levelMap[0].length;</span>
+<span class="fc" id="L146">        int totalRow = levelMap.length;       </span>
+<span class="fc" id="L147">        ArrayList&lt;Integer&gt; treeColumn = new ArrayList&lt;&gt;(); </span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">        for (int col = 0; col &lt; totalCol; col++) {</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">            for (int row = 0; row &lt; totalRow; row++) {</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">                if (levelMap[row][col] ==  'T') {</span>
+<span class="fc" id="L151">                    treeColumn.add(32 * col);</span>
+                }
+            }
+        }
+        
+<span class="fc" id="L156">        return treeColumn;</span>
+    }
+
+
+    /**
+     * Draws the terrain.
+     *
+     * @param app the application instance
+     */
+    public void draw(App app) {
+        
+<span class="fc" id="L167">        ArrayList&lt;Integer&gt; treeColumn = treeColumn(levelMap);</span>
+<span class="fc" id="L168">        app.image(app.backgroundImage, 0, 0);</span>
+
+<span class="fc bfc" id="L170" title="All 2 branches covered.">        for (int col = 0; col &lt; App.WIDTH; col++) {</span>
+<span class="fc" id="L171">                int height = app.terrainHeight[col];</span>
+<span class="fc" id="L172">                app.stroke(getColor()[0], getColor()[1], getColor()[2]);</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">                if (height &lt; App.HEIGHT) {    </span>
+<span class="fc" id="L174">                    app.line(col, height, col, App.HEIGHT);  </span>
+                }          
+        }
+        
+<span class="fc bfc" id="L178" title="All 2 branches covered.">        for (int i = 0; i &lt; treeColumn.size(); i++) {</span>
+<span class="fc" id="L179">            int tree_col = treeColumn.get(i);</span>
+<span class="fc" id="L180">            int tree_row = app.terrainHeight[tree_col];</span>
+<span class="pc bpc" id="L181" title="1 of 2 branches missed.">            if (app.treeImage != null) {</span>
+<span class="fc" id="L182">                app.treeImage.resize(0, 32);</span>
+<span class="fc" id="L183">                app.image(app.treeImage, tree_col - app.treeImage.width/2, tree_row - app.treeImage.height);</span>
+            }
+        }
+         
+<span class="fc" id="L187">        }</span>
+    
+
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

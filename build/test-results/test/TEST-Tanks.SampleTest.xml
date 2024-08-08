@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Tanks.SampleTest" tests="56" skipped="0" failures="0" errors="0" timestamp="2024-05-17T13:49:11" hostname="LILPOTATO123" time="17.146">
+  <properties/>
+  <testcase name="testKeyMoveLeft()" classname="Tanks.SampleTest" time="0.81"/>
+  <testcase name="testMoveTurretRight()" classname="Tanks.SampleTest" time="0.142"/>
+  <testcase name="testKeyParachute()" classname="Tanks.SampleTest" time="0.2"/>
+  <testcase name="testKeyMoveTurretRight()" classname="Tanks.SampleTest" time="1.15"/>
+  <testcase name="testCalculateDamage()" classname="Tanks.SampleTest" time="0.102"/>
+  <testcase name="testSwitchLevelInvalidIndex()" classname="Tanks.SampleTest" time="0.099"/>
+  <testcase name="testLoadNonExistentLevel()" classname="Tanks.SampleTest" time="0.133"/>
+  <testcase name="testLevelEnd()" classname="Tanks.SampleTest" time="0.636"/>
+  <testcase name="testCheckTerrainCollisionAtGround()" classname="Tanks.SampleTest" time="0.09"/>
+  <testcase name="testSwitchTurnWhenAPlayerIsDead()" classname="Tanks.SampleTest" time="0.104"/>
+  <testcase name="testFireProjectile()" classname="Tanks.SampleTest" time="0.094"/>
+  <testcase name="testTerrainExplosion()" classname="Tanks.SampleTest" time="0.108"/>
+  <testcase name="testUpdateScore()" classname="Tanks.SampleTest" time="0.096"/>
+  <testcase name="testKeyFire()" classname="Tanks.SampleTest" time="0.154"/>
+  <testcase name="testKeyMoveTurretLeft()" classname="Tanks.SampleTest" time="1.092"/>
+  <testcase name="resetHealth()" classname="Tanks.SampleTest" time="0.097"/>
+  <testcase name="testSwitchTurn()" classname="Tanks.SampleTest" time="0.096"/>
+  <testcase name="testCalculateDamageOutOfBounds()" classname="Tanks.SampleTest" time="0.104"/>
+  <testcase name="testMoveLeftOutOfFuel()" classname="Tanks.SampleTest" time="0.137"/>
+  <testcase name="testIncreasePowerwithBoundary()" classname="Tanks.SampleTest" time="0.103"/>
+  <testcase name="testTimeLevelEnd()" classname="Tanks.SampleTest" time="1.608"/>
+  <testcase name="testKeyLargerExplosion()" classname="Tanks.SampleTest" time="0.175"/>
+  <testcase name="testKeyIncreaseFuel()" classname="Tanks.SampleTest" time="0.116"/>
+  <testcase name="testMoveRightOutOfFuel()" classname="Tanks.SampleTest" time="0.132"/>
+  <testcase name="testMovingAverage()" classname="Tanks.SampleTest" time="0.124"/>
+  <testcase name="testExplosionProgress()" classname="Tanks.SampleTest" time="0.117"/>
+  <testcase name="testCheckTerrainCollision()" classname="Tanks.SampleTest" time="0.16"/>
+  <testcase name="testUpdateProjectile()" classname="Tanks.SampleTest" time="0.171"/>
+  <testcase name="testProjectileOutOfMap()" classname="Tanks.SampleTest" time="0.2"/>
+  <testcase name="testMoveTurretLeft()" classname="Tanks.SampleTest" time="0.15"/>
+  <testcase name="testUpdateWindSpeedWithinRange()" classname="Tanks.SampleTest" time="0.001"/>
+  <testcase name="testKeyLevelEnd()" classname="Tanks.SampleTest" time="0.167"/>
+  <testcase name="testTankExplosionWhenOutOfBounds()" classname="Tanks.SampleTest" time="2.122"/>
+  <testcase name="testTankExplosion()" classname="Tanks.SampleTest" time="0.151"/>
+  <testcase name="testMoveLeft()" classname="Tanks.SampleTest" time="0.171"/>
+  <testcase name="testTankColor()" classname="Tanks.SampleTest" time="0.145"/>
+  <testcase name="testIncreaseHealthOutOfBounds()" classname="Tanks.SampleTest" time="0.286"/>
+  <testcase name="testKeyIncreasePower()" classname="Tanks.SampleTest" time="0.143"/>
+  <testcase name="testIncreasePower()" classname="Tanks.SampleTest" time="0.149"/>
+  <testcase name="testInitialWindSpeedRange()" classname="Tanks.SampleTest" time="0.0"/>
+  <testcase name="testSortedScore()" classname="Tanks.SampleTest" time="0.149"/>
+  <testcase name="testKeyDecreasePower()" classname="Tanks.SampleTest" time="0.19"/>
+  <testcase name="testTankTurretPosition()" classname="Tanks.SampleTest" time="0.182"/>
+  <testcase name="testLostHealthWithBoundary()" classname="Tanks.SampleTest" time="0.185"/>
+  <testcase name="testDecreasePower()" classname="Tanks.SampleTest" time="0.182"/>
+  <testcase name="testDecreasePowerwithBoundary()" classname="Tanks.SampleTest" time="0.169"/>
+  <testcase name="testSwitchLevel()" classname="Tanks.SampleTest" time="0.237"/>
+  <testcase name="testMovingWhenFalling()" classname="Tanks.SampleTest" time="0.148"/>
+  <testcase name="testTankFallingWithoutParachute()" classname="Tanks.SampleTest" time="1.194"/>
+  <testcase name="testKeyMoveRight()" classname="Tanks.SampleTest" time="0.16"/>
+  <testcase name="testTankFallingWithParachute()" classname="Tanks.SampleTest" time="1.182"/>
+  <testcase name="testMoveRight()" classname="Tanks.SampleTest" time="0.209"/>
+  <testcase name="testKeyIncreaseHealth()" classname="Tanks.SampleTest" time="0.191"/>
+  <testcase name="testKeyNotSupported()" classname="Tanks.SampleTest" time="0.242"/>
+  <testcase name="testKeyRestartGame()" classname="Tanks.SampleTest" time="0.198"/>
+  <testcase name="testLoadLevel()" classname="Tanks.SampleTest" time="0.428"/>
+  <system-out><![CDATA[File not Found
+File not Found
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

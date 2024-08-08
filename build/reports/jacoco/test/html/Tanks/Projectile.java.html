@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Projectile.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tanks_scaffold</a> &gt; <a href="index.source.html" class="el_package">Tanks</a> &gt; <span class="el_source">Projectile.java</span></div><h1>Projectile.java</h1><pre class="source lang-java linenums">package Tanks;
+
+/**
+ * Represents a projectile in the game. Projectiles are fired by tanks and travel until they collide with terrain or go out of bounds.
+ */
+public class Projectile {
+    private float x;
+    private float y;
+    private float vx;
+    private float vy;
+    private char name;
+    private double ax;
+    private double ay;
+    private double t;
+    private boolean isLargerExplosion;
+
+    /**
+     * Create a new projectile with the given parameters.
+     *
+     * @param name the name of the tank that fired the projectile
+     * @param x the x-coordinate of the projectile
+     * @param y the y-coordinate of the projectile
+     * @param vx the velocity in the x-direction
+     * @param vy the velocity in the y-direction
+     * @param isLargerExplosion indicates whether the projectile causes a larger explosion
+     */
+
+<span class="fc" id="L28">    public Projectile(char name, float x, float y, float vx, float vy, boolean isLargerExplosion) {</span>
+<span class="fc" id="L29">        this.name = name;</span>
+<span class="fc" id="L30">        this.x = x;</span>
+<span class="fc" id="L31">        this.y = y;</span>
+<span class="fc" id="L32">        this.vx = vx;</span>
+<span class="fc" id="L33">        this.vy = vy;</span>
+<span class="fc" id="L34">        this.isLargerExplosion = isLargerExplosion;</span>
+
+<span class="fc" id="L36">    }</span>
+
+    /**
+     * Gets the name of the tank that fired the projectile.
+     * @return the name of the tank
+     */
+
+    public char getName() {
+<span class="fc" id="L44">        return this.name;</span>
+    }
+
+    /**
+     * Gets the current x-coordinate of the projectile.
+     * @return the x-coordinate of the projectile
+     */
+    public int getX() {
+<span class="fc" id="L52">        return (int)this.x;</span>
+    }
+
+    /**
+     * Gets the current y-coordinate of the projectile.
+     * @return the y-coordinate of the projectile
+     */
+    public int getY() {
+<span class="fc" id="L60">        return (int) this.y;</span>
+    }
+
+    /**
+     * Checks whether the projectile causes a larger explosion.
+     * @return true if the projectile causes a larger explosion, false otherwise
+     */
+    public boolean isLargerExplosion() {
+<span class="fc" id="L68">        return this.isLargerExplosion;</span>
+    }
+
+    /**
+     * Updates the position of the projectile based on the wind speed.
+     * @param windSpeed the current wind speed
+     */
+    public void update(int windSpeed) {
+        // Apply gravity acceleration
+        
+<span class="fc" id="L78">        vx += windSpeed * 0.03f/30; // Adjust for frame rate</span>
+
+        // Apply gravity acceleration
+<span class="fc" id="L81">        vy -= 0.24; // Constant gravity (pixels per second squared)</span>
+
+        // Update position based on velocity
+<span class="fc" id="L84">        x += vx;</span>
+<span class="fc" id="L85">        y -= vy;</span>
+<span class="fc" id="L86">    }</span>
+
+    /**
+     * Checks whether the projectile collides with the terrain.
+     * @param terrainHeight the array that contains terrain heights
+     * @return true if the projectile collides with the terrain, false otherwise
+     */
+    
+    public boolean checkTerrainCollision(int[] terrainHeight) {
+
+<span class="fc" id="L96">        int height = terrainHeight[(int) x]; // Get the terrain height at the projectile's x-coordinate</span>
+ 
+<span class="fc bfc" id="L98" title="All 2 branches covered.">        return (y &gt;= height); // Check if the projectile's y-coordinate is at or below the terrain height</span>
+    }
+
+    /**
+     * Checks if the projectile is out of the map bounds.
+     * @return true if the projectile is out of the map bounds, false otherwise
+     */
+    public boolean isOutOfMap() {
+<span class="pc bpc" id="L106" title="1 of 4 branches missed.">        if (x &gt;= 864 || x &lt;= 0) {</span>
+<span class="fc" id="L107">            return true;</span>
+        }
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (y &gt;= 640) {</span>
+<span class="fc" id="L110">            return true;</span>
+        }
+<span class="fc" id="L112">        return false;</span>
+    }
+
+    /**
+     * Draws the projectile.
+     * @param app the application instance
+     */
+    
+    public void draw(App app) {
+        // Draw the projectile at its current position
+<span class="fc" id="L122">        String fill_index = app.playerColours.getString(Character.toString(this.name));</span>
+<span class="fc" id="L123">        int index_1 = Integer.parseInt(fill_index.split(&quot;,&quot;)[0]);</span>
+<span class="fc" id="L124">        int index_2 = Integer.parseInt(fill_index.split(&quot;,&quot;)[1]);</span>
+<span class="fc" id="L125">        int index_3 = Integer.parseInt(fill_index.split(&quot;,&quot;)[2]);</span>
+<span class="fc" id="L126">        app.fill(index_1, index_2, index_3);</span>
+<span class="fc" id="L127">        app.noStroke();</span>
+<span class="fc" id="L128">        app.ellipse((int) x, (int) y, 6, 6);</span>
+<span class="fc" id="L129">    }</span>
+}
+    
+
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
